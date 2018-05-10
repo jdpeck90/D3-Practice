@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="descriptions" content="Drawing Shapes w/ D3 - Square " />
+    <meta charset="utf-8">
+    <title>Drawing SVG Shapes with D3 -- SQUARE</title>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <h3>D3 Bar XML</h3>
+    <svg>
+        <rect width="50" height="200" style="fill: blue" />
+    </svg>
+
+    <h3>D3 Bar JS</h3>
+    <script>
+        d3.select("body") // selects <body> html tag
+          .append("svg")  // add am <svg> html Element  
+          .append("rect") // add <rect> svg element
+          .attr('width',50) // set the attribute of width
+          .attr("height",200) // set the attribute of height
+          .style("fill", "blue") // add some style
+    </script>
+</body>
+</html>
+
+
+

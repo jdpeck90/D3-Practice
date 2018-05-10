@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>Drawing SVG Line Graphs with D3 - External Data Json</title>
+  <script src="d3.min.js" charset="utf-8"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+
+
+  <script>
+    var h = 100;
+    var w = 400;
+    var ds; //global var for data
+    var salesTotal = 0.0;
+    var salesAvg = 0.0;
+    var metrics = [];
+
+    function buildLine() {
+
+      var lineFun = d3.svg.line()
+        .x(function (d) { return ((d.month - 20130001) / 3.25); })
+        .y(function (d) { return h - d.sales; })
+        .interpolate("linear");
+
+      var svg = d3.select("body").append("svg").attr({ // create SVG Container
+        width: w,
+        height: h
+      })
+
+      var viz = svg.append("path") //Create & style line graph
+        .attr({
+          d: lineFun(ds),
+          "stroke": "purple",
+          "stroke-width": 2,
+          "fill": "none"
+        })
+    }
+
+    function showTotals() {
+      var t = d3.select('body').append('table'); // create table
+
+      //get total
+      for (var i = 0; i < ds.length; i++) {
+        salesTotal += ds[i]['sales'] * 1; // *1 converts to number
+      }
+
+      salesAvg = salesTotal / ds.length // get sales average
+
+      //add metrics to array
+      metrics.push("Sales Total: " + salesTotal)
+      metrics.push("Sales Avg: " + salesAvg.toFixed(2))
+
+      //add total to table
+      var tr = t.selectAll('tr')
+        .data(metrics)
+        .enter()
+        .append("tr")
+        .append("td")
+        .text(function (d) {
+          return d;
+        })
+    }
+
+    d3.csv("MonthlySales.csv", function (error, data) {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log(data);
+        ds = data;
+      }
+
+      buildLine();
+      showTotals();
+    })
+
+  </script>
+</body>
+
+</html>

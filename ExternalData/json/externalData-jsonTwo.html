@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+   
+    <title>Drawing SVG Line Graphs with D3 - External Data Json 2</title>
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    
+
+    <script>
+    
+    
+    var h = 100;
+    var w = 400;
+    var ds; //global var for data
+    var salesTotal=0.0;
+    var salesAvg=0.0;
+    var metrics=[];
+    
+        function buildLine() {
+                
+                var lineFun = d3.svg.line()
+                     .x(function(d){  return ((d.month-20130001)/3.25); })
+                     .y(function(d) { return h-d.sales; })
+                     .interpolate("linear");
+                
+             
+                var svg = d3.select("body").append("svg").attr({ width:w, height:h})
+                
+                var viz = svg.append("path")
+                            .attr({ 
+                                d: lineFun(ds.monthlySales),
+                                "stroke" : "purple",
+                                "stroke-width": 2,
+                                "fill" : "none"
+                            })
+            }
+        function showHeader() {
+            d3.select("body").append("h1")
+              .text(ds.category + " Sales (2013) ")
+        }
+
+        //Creates table and calculates Totals + Average for each Category
+        function showTotals(){ 
+            var t = d3.select('body').append('table');
+            console.log('from show totoals', ds)
+            //get total
+            for(var i=0; i < ds.monthlySales.length; i++) {
+                monthlySale = ds.monthlySales;
+                salesTotal += monthlySale[i]['sales']*1;// *1 converts to number
+            }
+            
+            salesAvg = salesTotal /  ds.monthlySales.length // get sale average
+            
+            //add metrics to array
+            metrics.push("Sales Total: " + salesTotal)
+            metrics.push("Sales Avg: " + salesAvg.toFixed(2))
+            
+            //add total to table
+            var tr = t.selectAll('tr')
+                      .data(metrics)
+                      .enter()
+                      .append("tr")
+                      .append("td")
+                      .text(function(d){ 
+                          console.log('from table creator',d) 
+                      return d; })
+        }
+        
+         d3.json("MonthlySalesbyCategory.json", function(error, data) {
+            
+             if(error) {
+                 console.log(error)
+             } else {
+                 console.log(data);
+                 ds = data;
+             }
+                showHeader()
+                buildLine(); 
+                showTotals();
+             }) 
+                    
+    </script>
+</body>
+</html>
+
+
+

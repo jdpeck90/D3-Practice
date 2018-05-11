@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="../d3.v3.js" charset="utf-8"></script>
+        <script src="d3.v3.js" charset="utf-8"></script>
     </head>
     <body>
 
@@ -23,7 +23,7 @@
                 height: h
             });
     
-        d3.json("data/us.json", function(json) {
+        d3.json("us.json", function(json) {
             svg.selectAll("path")
                 .data(json.features)
                 .enter()
